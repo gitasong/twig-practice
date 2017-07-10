@@ -1,62 +1,57 @@
 <?php
-    date_default_timezone_set("America/Los_Angeles");
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/Task.php";
-    //$app['debug'] = true;
-    session_start();
-
-    if(empty($_SESSION['list_of_tasks'])) {
-        $_SESSION['list_of_tasks'] = array();
-    }
+    require_once __DIR__."/../src/Category.php";
 
     $app = new Silex\Application();
 
+    $server = 'mysql:host=localhost:8889;dbname=to_do';
+    $username = 'root';
+    $password = 'root';
+    $DB = new PDO($server, $username, $password);
+
+
+
     $app->register(new Silex\Provider\TwigServiceProvider(), array(
-        "twig.path" => __DIR__."/../views"
+        'twig.path' => __DIR__.'/../views'
     ));
 
     $app->get("/", function() use ($app) {
-        $output = "";
-
-        // $all_tasks = Task::getAll();
-        //
-        // if (!empty($all_tasks)) {
-        //     $output .= "
-        //         <h1>To Do List</h1>
-        //         <p>Here are all your tasks:</p>
-        //         ";
-        //
-        //         foreach ($all_tasks as $task) {
-        //         $output .= "<p>" . $task->getDescription() . "</p>";
-        //     }
-        // }
-        //
-        // $output .= "
-        //     <form action='/tasks' method='post'>
-        //         <label for='description'>Task Description</label>
-        //         <input id='description' name='description' type='text'>
-        //
-        //         <button type='submit'>Add Task</button>
-        //     </form>
-        // ";
-        //
-        // $output .= "
-        // <form action='/delete_tasks' method='post'>
-        //     <button type='submit'>delete</button>
-        // </form>
-        // ";
-        return $app["twig"]->render("tasks.html.twig", array("tasks" => Task::getAll()));
+        return $app['twig']->render('index.html.twig', array('categories' => Category::getAll()));
     });
+
+    $app->get("/tasks", function() use ($app) {
+        return $app['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
+    });
+
+    $app->get("/categories/{id}", function($id) use ($app) {
+        $category = Category::find($id);
+        return $app['twig']->render('category.html.twig', array('category' => $category, 'tasks' => $category->getTasks()));
+    });
+
+    $app->post("/categories", function() use ($app) {
+        $category = new Category($_POST['name']);
+        $category->save();
+        return $app['twig']->render('index.html.twig', array('categories' => Category::getAll()));
+    });
+
 
     $app->post("/tasks", function() use ($app) {
-        $task = new Task($_POST['description']);
+        $description = $_POST['description'];
+        // var_dump("Description: " . $description);
+        $category_id = $_POST['category_id'];
+        // var_dump("Category ID: " . $category_id);
+        $task = new Task($description, $category_id, $id = null);
+        // var_dump("New Task: " . $task);
         $task->save();
-        return $app['twig']->render('create_task.html.twig', array('newtask' => $task));
+        $category = Category::find($category_id);
+        // var_dump("Category: " . $category);
+        return $app['twig']->render('category.html.twig', array('category' => $category, 'tasks' => $category->getTasks()));
     });
 
-    $app->post("/delete_tasks", function() use ($app) {
-      Task::deleteAll();
-      return $app['twig']->render('delete_tasks.html.twig');
+    $app->post("/delete_categories", function() use ($app) {
+        Category::deleteAll();
+        return $app['twig']->render('index.html.twig');
     });
 
     return $app;
