@@ -124,11 +124,13 @@
             $test_category_id = $test_category->getId();
 
             $description = "Email client";
-            $test_task = new Task($description, $test_category_id);
+            $due_date = "2017-06-18";
+            $test_task = new Task($description, $due_date, $test_category_id);
             $test_task->save();
 
             $description_2 = "Meet with boss";
-            $test_task_2 = new Task($description_2, $test_category_id);
+            $due_date_2 = "2017-06-19";
+            $test_task_2 = new Task($description_2, $due_date_2, $test_category_id);
             $test_task_2->save();
 
             //Act
@@ -181,8 +183,9 @@
             $test_category->save();
 
             $description = "Build website";
+            $due_date = "2017-06-19";
             $category_id = $test_category->getId();
-            $test_task = new Task($description, $category_id);
+            $test_task = new Task($description, $due_date, $category_id);
             $test_task->save();
 
 
@@ -192,7 +195,7 @@
             //Assert
             $this->assertEquals([], Task::getAll());
         }
-        
+
     }
 
 ?>
