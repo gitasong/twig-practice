@@ -77,9 +77,10 @@
             $returned_tasks = $GLOBALS['DB']->query("SELECT * FROM tasks WHERE category_id = {$this->getId()};");
             foreach($returned_tasks as $task) {
                 $description = $task['description'];
+                $due_date = $task['due_date'];
                 $task_id = $task['id'];
                 $category_id = $task['category_id'];
-                $new_task = new Task($description, $category_id, $task_id);
+                $new_task = new Task($description, $due_date, $category_id, $task_id);
                 array_push($tasks, $new_task);
             }
             return $tasks;
