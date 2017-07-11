@@ -8,3 +8,9 @@
 
   <button type="submit">Update</button>
 </form>
+
+<form action="/categories/{{ category.getId }}" method="post">
+  <input name="_method" type="hidden" value="delete">  <!--tells server to treat POST request as DELETE request-->
+
+  <button type="submit">Delete this category</button>
+</form>
