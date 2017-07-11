@@ -153,7 +153,25 @@
             //Assert
             $this->assertEquals("Home stuff", $test_category->getName());
         }
-        
+
+        function testDelete()
+        {
+            //Arrange
+            $name = "Work stuff";
+            $test_category = new Category($name);
+            $test_category->save();
+
+            $name_2 = "Home stuff";
+            $test_category_2 = new Category($name_2);
+            $test_category_2->save();
+
+
+            //Act
+            $test_category->delete();
+
+            //Assert
+            $this->assertEquals([$test_category_2], Category::getAll());
+        }
     }
 
 ?>
