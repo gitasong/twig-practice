@@ -7,7 +7,7 @@ class Task
     private $category_id;
     private $id;
 
-    function __construct($description, $category_id, $id = null)
+    function __construct($description, $due_date, $category_id, $id = null)
     {
         $this->description = $description;
         $this->due_date = $due_date;
@@ -47,7 +47,7 @@ class Task
 
     function save()
     {
-        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description, category_id) VALUES ('{$this->getDescription()}', {$this->getCategoryId()})");
+        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description, due_date, category_id) VALUES ('{$this->getDescription()}', {$this->getCategoryId()}, {$this->getDueDate()})");
         if ($executed) {
             $this->id = $GLOBALS['DB']->lastInsertId();
             return true;
