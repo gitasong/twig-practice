@@ -170,7 +170,8 @@
             $test_category->save();
 
             $description = "File reports";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             //Act
@@ -188,11 +189,13 @@
             $test_category->save();
 
             $description = "Wash the dog";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             $description2 = "Take out the trash";
-            $test_task2 = new Task($description2);
+            $completed2 = true;
+            $test_task2 = new Task($description2, $completed2);
             $test_task2->save();
 
             //Act
@@ -211,7 +214,8 @@
             $test_category->save();
 
             $description = "File reports";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             // Act

@@ -27,7 +27,8 @@
         {
             // Arrange
             $description = "Do dishes.";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
 
             // Act
             $result = $test_task->getDescription();
@@ -40,7 +41,8 @@
         {
             // Arrange
             $description = "Do dishes.";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
 
             // Act
             $test_task->setDescription("Drink coffee.");
@@ -50,11 +52,41 @@
             $this->assertEquals("Drink coffee.", $result);
         }
 
+        function testGetCompleted()
+        {
+            // Arrange
+            $description = "Do dishes.";
+            $completed = false;
+            $test_task = new Task($description, $completed);
+
+            // Act
+            $result = $test_task->getCompleted();
+
+            // Assert
+            $this->assertEquals($completed, $result);
+        }
+
+        function testSetCompleted()
+        {
+            // Arrange
+            $description = "Do dishes.";
+            $completed = true;
+            $test_task = new Task($description, $completed);
+
+            // Act
+            $test_task->setCompleted(false);
+            $result = $test_task->getCompleted();
+
+            // Assert
+            $this->assertEquals(false, $result);
+        }
+
         function testGetId()
         {
             //Arrange
             $description = "Watch the new Thor movie.";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             //Act
@@ -68,7 +100,8 @@
         {
             //Arrange
             $description = "Eat breakfast";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
 
             //Act
             $executed = $test_task->save();
@@ -81,12 +114,18 @@
         {
             //Arrange
             $description = "Wash the dog";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
+            var_dump($test_task);
             $test_task->save();
+            var_dump($test_task);
 
             $description_2 = "Water the lawn";
-            $test_task_2 = new Task($description_2);
+            $completed_2 = 0;  // Ask Tyler
+            $test_task_2 = new Task($description_2, $completed_2);
+            var_dump($test_task_2);
             $test_task_2->save();
+            var_dump($test_task_2);
 
             //Act
             $result = Task::getAll();
@@ -99,11 +138,13 @@
         {
             //Arrange
             $description = "Wash the dog";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             $description2 = "Water the lawn";
-            $test_task2 = new Task($description2);
+            $completed2 = false;
+            $test_task2 = new Task($description2, $completed2);
             $test_task2->save();
 
             //Act
@@ -118,11 +159,13 @@
         {
             //Arrange
             $description = "Wash the dog";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             $description_2 = "Water the lawn";
-            $test_task_2 = new Task($description_2);
+            $completed_2 = false;
+            $test_task_2 = new Task($description_2, $completed_2);
             $test_task_2->save();
 
             //Act
@@ -132,20 +175,38 @@
             $this->assertEquals($test_task, $result);
         }
 
-        function testUpdate()
+        function testUpdateDescription()
         {
             // Arrange
             $description = "Wash the dog";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             $new_description = "Clean the dog";
 
             // Act
-            $test_task->update($new_description);
+            $test_task->updateDescription($new_description);
 
             // Assert
             $this->assertEquals("Clean the dog", $test_task->getDescription());
+        }
+
+        function testUpdateCompleted()
+        {
+            // Arrange
+            $description = "Wash the dog";
+            $completed = true;
+            $test_task = new Task($description, $completed);
+            $test_task->save();
+
+            $new_completed = false;
+
+            // Act
+            $test_task->updateCompleted($new_completed);
+
+            // Assert
+            $this->assertEquals(false, $test_task->getCompleted());
         }
 
         function testAddCategory()
@@ -156,7 +217,8 @@
             $test_category->save();
 
             $description = "File reports";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             // Act
@@ -178,7 +240,8 @@
             $test_category2->save();
 
             $description = "File reports";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             // Act
@@ -197,7 +260,8 @@
             $test_category->save();
 
             $description = "File reports";
-            $test_task = new Task($description);
+            $completed = true;
+            $test_task = new Task($description, $completed);
             $test_task->save();
 
             // Act

@@ -123,8 +123,9 @@
                 $returned_task = $result->fetchAll(PDO::FETCH_ASSOC);
 
                 $description = $returned_task[0]['description'];
+                $completed = $returned_task[0]['completed'];
                 $id = $returned_task[0]['id'];
-                $new_task = new Task($description, $id);
+                $new_task = new Task($description, $completed, $id);
                 array_push($tasks, $new_task);
             }
             return $tasks;

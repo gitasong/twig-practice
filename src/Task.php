@@ -3,11 +3,13 @@ class Task
 {
 
     private $description;
+    private $completed;
     private $id;
 
-    function __construct($description, $id = null)
+    function __construct($description, $completed = false, $id = null)
     {
         $this->description = $description;
+        $this->completed = $completed;
         $this->id = $id;
     }
 
@@ -21,6 +23,16 @@ class Task
         return $this->description;
     }
 
+    function setCompleted($new_completed)
+    {
+        $this->completed = (bool) $new_completed;
+    }
+
+    function getCompleted()
+    {
+        return $this->completed;
+    }
+
     function getId()
     {
         return $this->id;
@@ -28,7 +40,7 @@ class Task
 
     function save()
     {
-        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description) VALUES ('{$this->getDescription()}')");
+        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description, completed) VALUES ('{$this->getDescription()}', '{$this->getCompleted()}')");
         if ($executed) {
             $this->id = $GLOBALS['DB']->lastInsertId();
             return true;
@@ -43,8 +55,9 @@ class Task
         $tasks = array();
         foreach($returned_tasks as $task) {
             $description = $task['description'];
+            $completed = $task['completed'];
             $id = $task['id'];
-            $new_task = new Task($description, $id);
+            $new_task = new Task($description, $completed, $id);
             array_push($tasks, $new_task);
         }
         return $tasks;
@@ -69,20 +82,32 @@ class Task
         $returned_tasks->execute();
         foreach ($returned_tasks as $task) {
             $description = $task['description'];
+            $completed = $task['completed'];
             $id = $task['id'];
             if ($id == $search_id) {
-               $found_task = new Task($description, $id);
+               $found_task = new Task($description, $completed, $id);
             }
         }
 
         return $found_task;
     }
 
-    function update($new_description)
+    function updateDescription($new_description)
     {
         $executed = $GLOBALS['DB']->exec("UPDATE tasks SET description = '{$new_description}' WHERE id = {$this->getId()};");
         if ($executed) {
            $this->setDescription($new_description);
+           return true;
+        } else {
+           return false;
+        }
+    }
+
+    function updateCompleted($new_completed)
+    {
+        $executed = $GLOBALS['DB']->exec("UPDATE tasks SET completed = '{$new_completed}' WHERE id = {$this->getId()};");
+        if ($executed) {
+           $this->setCompleted($new_completed);
            return true;
         } else {
            return false;
