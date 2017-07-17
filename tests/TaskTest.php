@@ -148,25 +148,6 @@
             $this->assertEquals("Clean the dog", $test_task->getDescription());
         }
 
-        function test_deleteTask()
-        {
-            // Arrange
-            $description = "Wash the dog";
-            $test_task = new Task($description);
-            $test_task->save();
-
-            $description2 = "Water the lawn";
-            $test_task2 = new Task($description2);
-            $test_task2->save();
-
-
-            // Act
-            $test_task->delete();
-
-            // Assert
-            $this->assertEquals([$test_task2], Task::getAll());
-        }
-
         function testAddCategory()
         {
             // Arrange
@@ -206,6 +187,25 @@
 
             // Assert
             $this->assertEquals($test_task->getCategories(), [$test_category, $test_category2]);
+        }
+
+        function testDelete()
+        {
+            // Arrange
+            $name = "Work stuff";
+            $test_category = new Category($name);
+            $test_category->save();
+
+            $description = "File reports";
+            $test_task = new Task($description);
+            $test_task->save();
+
+            // Act
+            $test_task->addCategory($test_category);
+            $test_task->delete();
+
+            // Assert
+            $this->assertEquals([], $test_category->getTasks());
         }
 
     }
