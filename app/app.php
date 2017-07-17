@@ -46,11 +46,25 @@
         return $app['twig']->render('task_edit.html.twig', array('task' => $task));
     });
 
-    $app->patch("/tasks/{id}", function($id) use ($app) {
+    $app->patch("/tasks/{id}/edit", function($id) use ($app) {
         $description = $_POST['description'];
         $task = Task::find($id);
         $task->update($description);
         return $app['twig']->render('task.html.twig', array('task' => $task, 'categories' => $task->getCategories(), 'all_categories' => Category::getAll()));
+    });
+
+    $app->patch("/tasks/{id}/update_description", function($id) use ($app) {
+        $description = $_POST['description'];
+        $task = Task::find($id);
+        $task->updateDescription($description);
+        return $app['twig']->render('task.html.twig', array('task' => $task, 'categories' => $task->getCategories(), 'all_categories' => Category::getAll()));
+    });
+
+    $app->patch("/tasks/{id}/update_completed", function($id) use ($app) {
+        $completed = $_POST['completed'];
+        $task = Task::find($id);
+        $task->updateCompleted($completed);
+        return $app['twig']->render('tasks.html.twig', array('tasks' => Task::getAll()));
     });
 
     $app->post("/add_tasks", function() use ($app) {
