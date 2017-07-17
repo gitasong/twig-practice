@@ -1,6 +1,6 @@
 <h1>Update the {{ task.getDescription }} task </h1>
 
-<form action="/tasks/{{ task.getId }}" method="post">
+<form action="/tasks/{{ task.getId }}/update_description" method="post">
     <input name="_method" type="hidden" value="patch">  <!--tells server to treat POST request as PATCH request-->
 
     <label for="description">Rename your task:</label>
@@ -9,7 +9,7 @@
     <button type="submit">Update</button>
 </form>
 
-<form action="/tasks/{{ task.getId }}" method="post">
+<form action="/tasks/{{ task.getId }}/update_completed" method="post">
     <input name="_method" type="hidden" value="patch">  <!--tells server to treat POST request as PATCH request-->
     <label for="completed">Completed?</label>
     <select name="completed">
