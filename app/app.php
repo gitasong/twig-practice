@@ -60,6 +60,11 @@
         return $app['twig']->render('category.html.twig', array('category' => $category, 'categories' => Category::getAll(), 'tasks' => $category->getTasks(), 'all_tasks' => Task::getAll()));
     });
 
+    $app->post("/delete_tasks", function() use ($app) {
+        Task::deleteAll();
+        return $app['twig']->render('index.html.twig');
+    });
+
     $app->get("/categories/{id}", function($id) use ($app) {
         $category = Category::find($id);
         return $app['twig']->render('category.html.twig', array('category' => $category, 'tasks' => $category->getTasks(), 'all_tasks' => Task::getAll()));
