@@ -6,6 +6,13 @@
   <label for="description">Rename your task:</label>
   <input id="description" name="description" type="text">
 
+  <label for="completed">Completed?</label>  <!-- should this be in a separate form? -->
+  <select name="completed">
+      <option value=false>No</option>
+      <option value=true>Yes</option>
+  </select>
+  <input id="completed" name="completed" type="text">
+
   <button type="submit">Update</button>
 </form>
 
