@@ -1,23 +1,27 @@
 <h1>Update the {{ task.getDescription }} task </h1>
 
 <form action="/tasks/{{ task.getId }}" method="post">
-  <input name="_method" type="hidden" value="patch">  <!--tells server to treat POST request as PATCH request-->
+    <input name="_method" type="hidden" value="patch">  <!--tells server to treat POST request as PATCH request-->
 
-  <label for="description">Rename your task:</label>
-  <input id="description" name="description" type="text">
+    <label for="description">Rename your task:</label>
+    <input id="description" name="description" type="text">
 
-  <label for="completed">Completed?</label>  <!-- should this be in a separate form? -->
-  <select name="completed">
-      <option value=false>No</option>
-      <option value=true>Yes</option>
-  </select>
-  <input id="completed" name="completed" type="text">
-
-  <button type="submit">Update</button>
+    <button type="submit">Update</button>
 </form>
 
 <form action="/tasks/{{ task.getId }}" method="post">
-  <input name="_method" type="hidden" value="delete">  <!--tells server to treat POST request as DELETE request-->
+    <input name="_method" type="hidden" value="patch">  <!--tells server to treat POST request as PATCH request-->
+    <label for="completed">Completed?</label>
+    <select name="completed">
+        <option value=false>No</option>
+        <option value=true>Yes</option>
+    </select>
 
-  <button type="submit">Delete this task</button>
+    <button type="submit">Update</button>
+</form>
+
+<form action="/tasks/{{ task.getId }}" method="post">
+    <input name="_method" type="hidden" value="delete">  <!--tells server to treat POST request as DELETE request-->
+
+    <button type="submit">Delete this task</button>
 </form>
