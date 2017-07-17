@@ -3,13 +3,11 @@ class Task
 {
 
     private $description;
-    private $category_id;
     private $id;
 
-    function __construct($description, $category_id, $id = null)
+    function __construct($description, $id = null)
     {
         $this->description = $description;
-        $this->category_id = $category_id;
         $this->id = $id;
     }
 
@@ -28,14 +26,9 @@ class Task
         return $this->id;
     }
 
-    function getCategoryId()
-    {
-        return $this->category_id;
-    }
-
     function save()
     {
-        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description, category_id) VALUES ('{$this->getDescription()}', {$this->getCategoryId()})");
+        $executed = $GLOBALS['DB']->exec("INSERT INTO tasks (description) VALUES ('{$this->getDescription()}')");
         if ($executed) {
             $this->id = $GLOBALS['DB']->lastInsertId();
             return true;
@@ -49,10 +42,9 @@ class Task
         $returned_tasks = $GLOBALS['DB']->query("SELECT * FROM tasks;");
         $tasks = array();
         foreach($returned_tasks as $task) {
-            $task_description = $task['description'];
-            $task_id = $task['id'];
-            $category_id = $task['category_id'];
-            $new_task = new Task($task_description, $category_id, $task_id);
+            $description = $task['description'];
+            $id = $task['id'];
+            $new_task = new Task($description, $id);
             array_push($tasks, $new_task);
         }
         return $tasks;
@@ -60,24 +52,51 @@ class Task
 
     static function deleteAll()
     {
-       $GLOBALS['DB']->exec("DELETE FROM tasks;");
+        $executed = $GLOBALS['DB']->exec("DELETE FROM tasks;");
+            if ($executed) {
+                return true;
+            } else {
+
+                return false;
+            }
     }
 
     static function find($search_id)
     {
+        $found_task = null;
         $returned_tasks = $GLOBALS['DB']->prepare("SELECT * FROM tasks WHERE id = :id");
         $returned_tasks->bindParam(':id', $search_id, PDO::PARAM_STR);
         $returned_tasks->execute();
         foreach ($returned_tasks as $task) {
-            $task_description = $task['description'];
-            $category_id = $task['category_id'];
-            $task_id = $task['id'];
-            if ($task_id == $search_id) {
-               $found_task = new Task($task_description, $category_id, $task_id);
+            $description = $task['description'];
+            $id = $task['id'];
+            if ($id == $search_id) {
+               $found_task = new Task($description, $id);
             }
         }
 
         return $found_task;
+    }
+
+    function update($new_description)
+    {
+        $executed = $GLOBALS['DB']->exec("UPDATE tasks SET description = '{$new_description}' WHERE id = {$this->getId()};");
+        if ($executed) {
+           $this->setDescription($new_description);
+           return true;
+        } else {
+           return false;
+        }
+    }
+
+    function delete()
+    {
+        $executed = $GLOBALS['DB']->exec("DELETE FROM tasks WHERE id = {$this->getId()};");
+         if ($executed) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 ?>
